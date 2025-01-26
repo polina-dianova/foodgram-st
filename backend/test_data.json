@@ -1,0 +1,311 @@
+[
+    {
+        "model": "recipe.user",
+        "pk": 1,
+        "fields": {
+            "last_login": "2025-01-14T18:23:21.507Z",
+            "is_superuser": true,
+            "username": "admin",
+            "is_staff": true,
+            "is_active": true,
+            "date_joined": "2025-01-14T18:23:08.261Z",
+            "email": "",
+            "first_name": "",
+            "last_name": "",
+            "password": "pbkdf2_sha256$260000$7VXOpuVXXTDckvdrcusYJQ$rR0rCZSMd9NvIGiLvRh9pVv0tuX5PQlK5o/dmmfGB4w=",
+            "avatar": "",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "recipe.user",
+        "pk": 14,
+        "fields": {
+            "last_login": "2025-01-16T11:50:56.180Z",
+            "is_superuser": false,
+            "username": "vasya.ivanov",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2025-01-15T22:57:12.890Z",
+            "email": "vivanov@yandex.ru",
+            "first_name": "Вася",
+            "last_name": "Иванов",
+            "password": "pbkdf2_sha256$260000$xE2qW3Klt9HV0qNFv2yPu2$pDQvxQqzgp7+o30eA7K4NJ4BCHUit/lkL4vIDxUdQGQ=",
+            "avatar": "",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "recipe.user",
+        "pk": 15,
+        "fields": {
+            "last_login": "2025-01-16T11:51:01.347Z",
+            "is_superuser": false,
+            "username": "second-user",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2025-01-15T22:57:13.233Z",
+            "email": "second_user@email.org",
+            "first_name": "Андрей",
+            "last_name": "Макаревский",
+            "password": "pbkdf2_sha256$260000$Kn1ea2aELs1OB6L3H5wn7G$+AF2Jb6VwKy3mDw9l7iyZGkGc3N7lGPSRz0/SeDal8Y=",
+            "avatar": "",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "recipe.user",
+        "pk": 16,
+        "fields": {
+            "last_login": null,
+            "is_superuser": false,
+            "username": "third-user-username",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2025-01-15T22:57:13.480Z",
+            "email": "third-user@user.ru",
+            "first_name": "Гордон",
+            "last_name": "Рамзиков",
+            "password": "pbkdf2_sha256$260000$KvSZ5ytcJywfMMZ3EXV5sK$aAhMB5tGNplSwbl95MeHhjBH5ZbmKy7gT5q0DzoIK7Y=",
+            "avatar": "",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "recipe.subscription",
+        "pk": 9,
+        "fields": {
+            "user": 14,
+            "following": 16
+        }
+    },
+    {
+        "model": "recipe.subscription",
+        "pk": 10,
+        "fields": {
+            "user": 14,
+            "following": 15
+        }
+    },
+    {
+        "model": "recipe.shoppingcart",
+        "pk": 5,
+        "fields": {
+            "user": 14,
+            "recipe": 22
+        }
+    },
+    {
+        "model": "recipe.recipe",
+        "pk": 1,
+        "fields": {
+            "name": "Торт",
+            "text": "Скушать",
+            "author": 1,
+            "image": "recipes/Regular_star_polygon_12-5.svg.png",
+            "cooking_time": 2
+        }
+    },
+    {
+        "model": "recipe.recipe",
+        "pk": 22,
+        "fields": {
+            "name": "Нечто съедобное (это не точно)",
+            "text": "Приготовьте как-нибудь эти ингредиенты",
+            "author": 15,
+            "image": "recipes/images/temp_xpiYL1H.png",
+            "cooking_time": 5
+        }
+    },
+    {
+        "model": "recipe.recipe",
+        "pk": 23,
+        "fields": {
+            "name": "Еще одна попытка приготовить еду",
+            "text": "Вероятно стоит это смешать.",
+            "author": 15,
+            "image": "recipes/images/temp_08BZ9v6.png",
+            "cooking_time": 10
+        }
+    },
+    {
+        "model": "recipe.recipe",
+        "pk": 24,
+        "fields": {
+            "name": "Еда без дополнительной обработки",
+            "text": "Просто съесть",
+            "author": 15,
+            "image": "recipes/images/temp_pzyGaIo.png",
+            "cooking_time": 1
+        }
+    },
+    {
+        "model": "recipe.recipe",
+        "pk": 25,
+        "fields": {
+            "name": "Нечто жареное",
+            "text": "Жарить 10 минут",
+            "author": 15,
+            "image": "recipes/images/temp_ym5HrKU.png",
+            "cooking_time": 10
+        }
+    },
+    {
+        "model": "recipe.recipe",
+        "pk": 26,
+        "fields": {
+            "name": "Варёное нечто",
+            "text": "Варить 20 минут",
+            "author": 14,
+            "image": "recipes/images/temp_veERZQS.png",
+            "cooking_time": 25
+        }
+    },
+    {
+        "model": "recipe.ingredient",
+        "pk": 1,
+        "fields": {
+            "name": "абрикосовое варенье",
+            "measurement_unit": "г"
+        }
+    },
+    {
+        "model": "recipe.ingredient",
+        "pk": 2,
+        "fields": {
+            "name": "абрикосовое пюре",
+            "measurement_unit": "г"
+        }
+    },
+    {
+        "model": "recipe.ingredient",
+        "pk": 3,
+        "fields": {
+            "name": "абрикосовый джем",
+            "measurement_unit": "г"
+        }
+    },
+    {
+        "model": "recipe.ingredient",
+        "pk": 4,
+        "fields": {
+            "name": "абрикосовый сок",
+            "measurement_unit": "мл"
+        }
+    },
+    {
+        "model": "recipe.ingredient",
+        "pk": 5,
+        "fields": {
+            "name": "абрикосы",
+            "measurement_unit": "г"
+        }
+    },
+    {
+        "model": "recipe.ingredient",
+        "pk": 6,
+        "fields": {
+            "name": "абрикосы консервированные",
+            "measurement_unit": "г"
+        }
+    },
+    {
+        "model": "recipe.ingredient",
+        "pk": 7,
+        "fields": {
+            "name": "авокадо",
+            "measurement_unit": "г"
+        }
+    },
+    {
+        "model": "recipe.ingredient",
+        "pk": 8,
+        "fields": {
+            "name": "агава сироп",
+            "measurement_unit": "мл"
+        }
+    },
+    {
+        "model": "recipe.ingredient",
+        "pk": 9,
+        "fields": {
+            "name": "агар-агар",
+            "measurement_unit": "г"
+        }
+    },
+    {
+        "model": "recipe.ingredient",
+        "pk": 10,
+        "fields": {
+            "name": "аграм",
+            "measurement_unit": "г"
+        }
+    },
+    {
+        "model": "recipe.recipeingredient",
+        "pk": 33,
+        "fields": {
+            "recipe": 22,
+            "ingredient": 1,
+            "amount": 10
+        }
+    },
+    {
+        "model": "recipe.recipeingredient",
+        "pk": 34,
+        "fields": {
+            "recipe": 22,
+            "ingredient": 2,
+            "amount": 20
+        }
+    },
+    {
+        "model": "recipe.recipeingredient",
+        "pk": 35,
+        "fields": {
+            "recipe": 23,
+            "ingredient": 1,
+            "amount": 10
+        }
+    },
+    {
+        "model": "recipe.recipeingredient",
+        "pk": 36,
+        "fields": {
+            "recipe": 23,
+            "ingredient": 2,
+            "amount": 20
+        }
+    },
+    {
+        "model": "recipe.recipeingredient",
+        "pk": 37,
+        "fields": {
+            "recipe": 24,
+            "ingredient": 1,
+            "amount": 10
+        }
+    },
+    {
+        "model": "recipe.recipeingredient",
+        "pk": 38,
+        "fields": {
+            "recipe": 25,
+            "ingredient": 2,
+            "amount": 20
+        }
+    },
+    {
+        "model": "recipe.recipeingredient",
+        "pk": 39,
+        "fields": {
+            "recipe": 26,
+            "ingredient": 2,
+            "amount": 20
+        }
+    }
+]
