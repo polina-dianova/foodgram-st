@@ -6,7 +6,6 @@ from django.core.exceptions import ValidationError
 
 
 def custom_username_validator(value):
-    """Кастомная валидация имени пользователя."""
     allowed_characters = r'^[\w.@+-]+$'
     regex_validator = RegexValidator(
         regex=allowed_characters,

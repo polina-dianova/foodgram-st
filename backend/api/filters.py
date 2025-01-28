@@ -12,7 +12,6 @@ class RecipeFilter(rest_framework.FilterSet):
         fields = ['name', 'author']
 
     def filter_is_in_shopping_cart(self, queryset, name, value):
-        """Фильтрация по наличию в корзине"""
         if self.request.user.is_authenticated:
             shopping_cart_subquery = ShoppingCart.objects.filter(
                 user=self.request.user,
@@ -25,7 +24,6 @@ class RecipeFilter(rest_framework.FilterSet):
         return queryset  
 
     def filter_is_favorited(self, queryset, name, value):
-        """Фильтрация по наличию в избранном"""
         if self.request.user.is_authenticated:
             favorite_subquery = Favorite.objects.filter(
                 user=self.request.user,

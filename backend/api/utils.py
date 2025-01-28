@@ -2,7 +2,7 @@ from django.utils.timezone import now
 
 
 def render_shopping_cart(ingredients):
-    """Рендерит текстовый отчет для списка покупок."""
+
     today = now().strftime("%d.%m.%Y")
     header = f'Список покупок\nДата: {today}\n'
     product_list = [(

@@ -5,6 +5,7 @@ from rest_framework.decorators import action
 from rest_framework.permissions import (IsAuthenticated, IsAuthenticatedOrReadOnly)
 from rest_framework.response import Response
 from rest_framework.exceptions import ValidationError
+
 from django.core.files.base import ContentFile
 from django.contrib.auth import get_user_model
 from django.http import FileResponse
@@ -60,12 +61,11 @@ class RecipeViewSet(viewsets.ModelViewSet):
     @staticmethod
     def handle_recipe_action(model, user, recipe, action_type):
         if action_type == 'add':
-            obj, created = model.objects.get_or_create(
-                user=user, recipe=recipe)
+            obj, created = model.objects.get_or_create(user=user, recipe=recipe)
             if not created:
                 raise serializers.ValidationError('Рецепт уже добавлен.')
-            return Response(SubscriptionRecipeSerializer(recipe).data,
-                            status=status.HTTP_201_CREATED)
+            return Response(SubscriptionRecipeSerializer(recipe).data, status=status.HTTP_201_CREATED)
+        
         elif action_type == 'remove':
             obj = model.objects.filter(user=user, recipe=recipe)
             if not obj.exists():
@@ -73,8 +73,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
             obj.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
 
-    @action(detail=True, methods=['post'],
-            permission_classes=[IsAuthenticated])
+    @action(detail=True, methods=['post'], permission_classes=[IsAuthenticated])
     def shopping_cart(self, request, pk=None):
         recipe = get_object_or_404(Recipe, pk=pk)
         return self.handle_recipe_action(ShoppingCart, request.user, recipe, 'add')
@@ -84,8 +83,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
         recipe = get_object_or_404(Recipe, pk=pk)
         return self.handle_recipe_action(ShoppingCart, request.user, recipe, 'remove')
 
-    @action(detail=True, methods=['post'],
-            permission_classes=[IsAuthenticated])
+    @action(detail=True, methods=['post'], permission_classes=[IsAuthenticated])
     def favorite(self, request, pk=None):
         recipe = get_object_or_404(Recipe, pk=pk)
         return self.handle_recipe_action(Favorite, request.user, recipe, 'add')
@@ -98,9 +96,8 @@ class RecipeViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=['get'], url_path='get-link')
     def get_link(self, request, pk=None):
         recipe = self.get_object()
-        return Response({'short-link': request.build_absolute_uri(
-            reverse('recipe_redirect', args=[recipe.pk])
-        )}, status=status.HTTP_200_OK)
+        short_link = request.build_absolute_uri(reverse('recipe_redirect', args=[recipe.pk]))
+        return Response({'short-link': short_link}, status=status.HTTP_200_OK)
 
     @action(detail=False, permission_classes=[IsAuthenticated])
     def download_shopping_cart(self, request):
@@ -114,7 +111,8 @@ class RecipeViewSet(viewsets.ModelViewSet):
         ).annotate(amount=Sum('amount')).order_by('name')
 
         return FileResponse(
-            render_shopping_cart(ingredients), as_attachment=True,
+            render_shopping_cart(ingredients), 
+            as_attachment=True,
             filename='Shopping_cart.txt',
             content_type='text/plain'
         )

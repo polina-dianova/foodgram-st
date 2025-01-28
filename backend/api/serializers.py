@@ -1,7 +1,6 @@
 from rest_framework import serializers
 from collections import Counter
-from recipe.models import (Ingredient, Recipe, RecipeIngredient,
-                           Favorite, ShoppingCart)
+from recipe.models import (Ingredient, Recipe, RecipeIngredient, Favorite, ShoppingCart)
 from django.contrib.auth import get_user_model
 from djoser.serializers import UserSerializer
 from drf_extra_fields.fields import Base64ImageField
@@ -16,8 +15,13 @@ class UsersSerializer(UserSerializer):
     class Meta:
         model = User
         fields = (
-            'email', 'id', 'username', 'first_name',
-            'last_name', 'is_subscribed', 'avatar'
+            'email', 
+            'id', 
+            'username', 
+            'first_name',
+            'last_name', 
+            'is_subscribed', 
+            'avatar'
         )
 
     def get_is_subscribed(self, author):
@@ -28,7 +32,6 @@ class UsersSerializer(UserSerializer):
 
 
 class IngredientSerializer(serializers.ModelSerializer):
-    """Сериализатор для модели ингредиентов."""
 
     class Meta:
         fields = '__all__'
@@ -36,7 +39,6 @@ class IngredientSerializer(serializers.ModelSerializer):
 
 
 class RecipeIngredientSerializer(serializers.ModelSerializer):
-    """Сериализатор для отображения ингредиентов рецепта."""
 
     id = serializers.PrimaryKeyRelatedField(
         queryset=Ingredient.objects.all(),
@@ -53,17 +55,22 @@ class RecipeIngredientSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = RecipeIngredient
-        fields = ('id', 'name', 'measurement_unit', 'amount')
+        fields = ('id', 
+                  'name', 
+                  'measurement_unit', 
+                  'amount')
 
 
 class SubscriptionRecipeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Recipe
-        fields = ('id', 'name', 'image', 'cooking_time')
+        fields = ('id', 
+                  'name', 
+                  'image', 
+                  'cooking_time')
 
 
 class RecipeSerializer(serializers.ModelSerializer):
-    """Сериализатор для рецептов."""
 
     author = UsersSerializer(read_only=True)
     ingredients = RecipeIngredientSerializer(source='recipe_ingredients',
@@ -76,12 +83,17 @@ class RecipeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Recipe
         fields = (
-            'id', 'author', 'ingredients', 'is_favorited',
-            'is_in_shopping_cart', 'name', 'image', 'text', 'cooking_time'
+            'id', 
+            'author', 
+            'ingredients', 
+            'is_favorited',
+            'is_in_shopping_cart', 
+            'name', 'image', 
+            'text', 
+            'cooking_time'
         )
 
     def validate_ingredients(self, ingredients):
-        """Проверка ингредиентов на дубликаты."""
         if not ingredients:
             raise serializers.ValidationError(
                 'Необходимо добавить хотя бы один ингредиент.')
@@ -98,7 +110,6 @@ class RecipeSerializer(serializers.ModelSerializer):
         return ingredients
 
     def validate_image(self, image):
-        """Проверка картинки."""
         if not image:
             raise serializers.ValidationError(
                 'Необходимо добавить фото.')
@@ -106,7 +117,6 @@ class RecipeSerializer(serializers.ModelSerializer):
 
     @staticmethod
     def save_ingredients(recipe, ingredients_data):
-        """Создание связей ингредиентов с рецептом."""
         RecipeIngredient.objects.bulk_create(
             RecipeIngredient(
                 recipe=recipe,
@@ -117,14 +127,12 @@ class RecipeSerializer(serializers.ModelSerializer):
         )
 
     def create(self, validated_data):
-        """Создание рецепта."""
         ingredients_data = validated_data.pop('recipe_ingredients')
         recipe = super().create(validated_data)
         self.save_ingredients(recipe, ingredients_data)
         return recipe
 
     def update(self, instance, validated_data):
-        """Обновление рецепта."""
         ingredients_data = validated_data.pop('recipe_ingredients', None)
         validated_ingredients = self.validate_ingredients(ingredients_data)
         instance.recipe_ingredients.all().delete()
@@ -150,8 +158,15 @@ class UserWithRecipesSerializer(UsersSerializer):
     class Meta:
         model = User
         fields = (
-            'email', 'id', 'username', 'first_name', 'last_name',
-            'is_subscribed', 'recipes', 'recipes_count', 'avatar'
+            'email', 
+            'id', 
+            'username', 
+            'first_name', 
+            'last_name',
+            'is_subscribed', 
+            'recipes', 
+            'recipes_count', 
+            'avatar'
         )
 
     def get_recipes(self, obj):

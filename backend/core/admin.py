@@ -14,7 +14,11 @@ admin.site.unregister(User)
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
-    list_display = ('username', 'email', 'first_name', 'last_name', 'is_staff')
+    list_display = ('username', 
+                    'email', 
+                    'first_name', 
+                    'last_name', 
+                    'is_staff')
     search_fields = ('username', 'email')
     list_filter = ('is_staff', 'is_active')
 
@@ -44,7 +48,10 @@ class RecipeIngredientInline(admin.TabularInline):
 
 @admin.register(Recipe)
 class RecipeAdmin(admin.ModelAdmin):
-    list_display = ('name', 'author', 'cooking_time', 'favorites_count')
+    list_display = ('name', 
+                    'author', 
+                    'cooking_time', 
+                    'favorites_count')
     list_filter = ('author', 'cooking_time')
     search_fields = ('name', 'author__username')
     inlines = [RecipeIngredientInline]

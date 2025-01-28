@@ -8,8 +8,6 @@ from .models import (Ingredient, Recipe, RecipeIngredient,
 
 @admin.register(User)
 class UsersAdmin(BaseUserAdmin):
-    """Возможность редактировать и удалять все данные о пользователях.
-    Поиск по адресу электронной почты и имени пользователя."""
 
     list_display = (
         'id',
@@ -42,7 +40,6 @@ class UsersAdmin(BaseUserAdmin):
 
 @admin.register(Subscription)
 class SubscriptionAdmin(admin.ModelAdmin):
-    """Настройки отображения данных о подписках."""
 
     list_display = ('user', 'author')
 
@@ -55,7 +52,6 @@ class RecipeIngredientInline(admin.TabularInline):
 
 @admin.register(Recipe)
 class RecipeAdmin(admin.ModelAdmin):
-    """Настройка отображения рецептов."""
 
     inlines = (RecipeIngredientInline,)
     list_display = (
@@ -85,7 +81,6 @@ class RecipeAdmin(admin.ModelAdmin):
     @mark_safe
     @admin.display(description='Изображение')
     def display_image(self, recipe):
-        """Отображение изображения в виде миниатюры."""
         if recipe.image:
             return f'<img src="{recipe.image.url}" style="height: 100px;" />'
         return 'Нет изображения'
@@ -93,7 +88,6 @@ class RecipeAdmin(admin.ModelAdmin):
 
 @admin.register(Ingredient)
 class IngredientAdmin(admin.ModelAdmin):
-    """Настройка отображения ингредиентов."""
 
     list_display = ('name', 'measurement_unit')
     list_filter = ('measurement_unit',)
@@ -102,6 +96,5 @@ class IngredientAdmin(admin.ModelAdmin):
 
 @admin.register(Favorite, ShoppingCart)
 class FavoriteShoppingCartAdmin(admin.ModelAdmin):
-    """Настройки отображения избранных у пользователей и списка покупок."""
 
     list_display = ('user', 'recipe')
