@@ -5,11 +5,11 @@ from django.core.validators import MinValueValidator
 from django.core.exceptions import ValidationError
 
 
-def custom_username_validator(value):
+def username_validator(value):
     allowed_characters = r'^[\w.@+-]+$'
     regex_validator = RegexValidator(
         regex=allowed_characters,
-        message=('Имя пользователя может содержать только '
+        message=('Ник может содержать только '
                  'буквы, цифры и символы: . @ + - _')
     )
     try:
@@ -19,16 +19,16 @@ def custom_username_validator(value):
             set(char for char in value
                 if not char.isalnum() and char not in '._-'))
         raise ValidationError(
-            f'Имя пользователя содержит недопустимые символы: {invalid_chars}')
+            f'Ник содержит недопустимые символы: {invalid_chars}')
 
 
 class User(AbstractUser):
 
     username = models.CharField(
-        'Имя пользователя',
+        'Ник пользователя',
         max_length=150,
         unique=True,
-        validators=[custom_username_validator],
+        validators=[username_validator],
     )
     email = models.EmailField(
         'email',
@@ -70,7 +70,7 @@ class Subscription(models.Model):
         User,
         related_name='authors',
         on_delete=models.CASCADE,
-        verbose_name='Подписка'
+        verbose_name='Авторы'
     )
 
     class Meta:

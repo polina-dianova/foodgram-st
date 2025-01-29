@@ -55,18 +55,24 @@ class RecipeAdmin(admin.ModelAdmin):
 
     inlines = (RecipeIngredientInline,)
     list_display = (
-        'id', 'name', 'cooking_time', 'author_username',
-        'get_favorite_count', 'display_ingredients', 'display_image',
+        'id', 
+        'name', 
+        'cooking_time', 
+        'author_username',
+        'get_favorite_count', 
+        'display_ingredients', 
+        'display_image',
     )
     list_filter = ('name', 'author__username',)
     search_fields = ('name', 'author__username',)
 
+    @admin.display(description='Автор')
     def author_username(self, recipe):
         return recipe.author.username
 
+    @admin.display(description='В избранном')
     def get_favorite_count(self, recipe):
         return recipe.favorites.count()
-    get_favorite_count.short_description = 'В избранном'
 
     @mark_safe
     @admin.display(description='Ингредиенты')

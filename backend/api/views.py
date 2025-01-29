@@ -14,6 +14,7 @@ from django.shortcuts import get_object_or_404, redirect
 from django_filters.rest_framework import DjangoFilterBackend
 from django.urls import reverse
 from djoser.views import UserViewSet as DjoserUserViewSet
+from rest_framework.authtoken.views import ObtainAuthToken
 from recipe.models import (Ingredient, Recipe, Favorite, ShoppingCart, RecipeIngredient)
 from .serializers import (
     UsersSerializer, UserWithRecipesSerializer,
@@ -57,6 +58,9 @@ class RecipeViewSet(viewsets.ModelViewSet):
         if self.action == 'create':
             return [IsAuthenticated()]
         return [IsAuthorOrReadOnly(), IsAuthenticatedOrReadOnly()]
+    
+    def get_recipe(self, pk):
+        return get_object_or_404(Recipe, pk=pk)
 
     @staticmethod
     def handle_recipe_action(model, user, recipe, action_type):
@@ -67,30 +71,43 @@ class RecipeViewSet(viewsets.ModelViewSet):
             return Response(SubscriptionRecipeSerializer(recipe).data, status=status.HTTP_201_CREATED)
         
         elif action_type == 'remove':
-            obj = model.objects.filter(user=user, recipe=recipe)
-            if not obj.exists():
-                raise serializers.ValidationError('Рецепт не найден.')
-            obj.delete()
+            get_object_or_404(
+                model,
+                user=user,
+                recipe=recipe
+            ).delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
 
     @action(detail=True, methods=['post'], permission_classes=[IsAuthenticated])
     def shopping_cart(self, request, pk=None):
-        recipe = get_object_or_404(Recipe, pk=pk)
-        return self.handle_recipe_action(ShoppingCart, request.user, recipe, 'add')
-
+        recipe = self.get_recipe(pk)
+        return self.handle_recipe_action(
+            ShoppingCart,
+            request.user,
+            recipe,
+            'add')
+    
     @shopping_cart.mapping.delete
     def remove_from_shopping_cart(self, request, pk=None):
-        recipe = get_object_or_404(Recipe, pk=pk)
-        return self.handle_recipe_action(ShoppingCart, request.user, recipe, 'remove')
+        recipe = self.get_recipe(pk)
+        return self.handle_recipe_action(
+            ShoppingCart, 
+            request.user, 
+            recipe, 
+            'remove')
 
     @action(detail=True, methods=['post'], permission_classes=[IsAuthenticated])
     def favorite(self, request, pk=None):
-        recipe = get_object_or_404(Recipe, pk=pk)
-        return self.handle_recipe_action(Favorite, request.user, recipe, 'add')
-
+        recipe = self.get_recipe(pk)
+        return self.handle_recipe_action(
+            model = Favorite,
+            user = request.user,
+            recipe = recipe,
+            action_type = 'add'
+        )
     @favorite.mapping.delete
     def remove_from_favorites(self, request, pk=None):
-        recipe = get_object_or_404(Recipe, pk=pk)
+        recipe = self.get_recipe(pk)
         return self.handle_recipe_action(Favorite, request.user, recipe, 'remove')
 
     @action(detail=True, methods=['get'], url_path='get-link')
@@ -116,12 +133,6 @@ class RecipeViewSet(viewsets.ModelViewSet):
             filename='Shopping_cart.txt',
             content_type='text/plain'
         )
-
-
-def recipe_redirect(request, short_id):
-    get_object_or_404(Recipe, id=short_id)
-    return redirect(f'/recipes/{short_id}')
-
 
 class UserViewSet(DjoserUserViewSet):
     queryset = User.objects.all()
@@ -247,4 +258,5 @@ class CustomAuthToken(ObtainAuthToken):
             'auth_token': token.key,
             'user_id': user.id,
             'email': user.email,
-        })
+        }
+        )
