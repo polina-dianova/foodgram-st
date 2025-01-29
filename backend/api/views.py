@@ -58,12 +58,10 @@ class RecipeViewSet(viewsets.ModelViewSet):
         if self.action == 'create':
             return [IsAuthenticated()]
         return [IsAuthorOrReadOnly(), IsAuthenticatedOrReadOnly()]
-    
-    def get_recipe(self, pk):
-        return get_object_or_404(Recipe, pk=pk)
 
     @staticmethod
-    def handle_recipe_action(model, user, recipe, action_type):
+    def handle_recipe_action(model, user, action_type):
+        recipe = get_object_or_404(Recipe, pk)
         if action_type == 'add':
             obj, created = model.objects.get_or_create(user=user, recipe=recipe)
             if not created:
@@ -80,39 +78,31 @@ class RecipeViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=['post'], permission_classes=[IsAuthenticated])
     def shopping_cart(self, request, pk=None):
-        recipe = self.get_recipe(pk)
         return self.handle_recipe_action(
             ShoppingCart,
             request.user,
-            recipe,
             'add')
     
     @shopping_cart.mapping.delete
     def remove_from_shopping_cart(self, request, pk=None):
-        recipe = self.get_recipe(pk)
         return self.handle_recipe_action(
             ShoppingCart, 
             request.user, 
-            recipe, 
             'remove')
 
     @action(detail=True, methods=['post'], permission_classes=[IsAuthenticated])
     def favorite(self, request, pk=None):
-        recipe = self.get_recipe(pk)
         return self.handle_recipe_action(
             model = Favorite,
             user = request.user,
-            recipe = recipe,
             action_type = 'add'
         )
     @favorite.mapping.delete
     def remove_from_favorites(self, request, pk=None):
-        recipe = self.get_recipe(pk)
         return self.handle_recipe_action(Favorite, request.user, recipe, 'remove')
 
     @action(detail=True, methods=['get'], url_path='get-link')
     def get_link(self, request, pk=None):
-        recipe = self.get_object()
         short_link = request.build_absolute_uri(reverse('recipe_redirect', args=[recipe.pk]))
         return Response({'short-link': short_link}, status=status.HTTP_200_OK)
 

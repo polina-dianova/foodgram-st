@@ -8,7 +8,7 @@ from drf_extra_fields.fields import Base64ImageField
 User = get_user_model()
 
 
-class UsersSerializer(serializers.ModelSerializer):
+class UsersSerializer(UserSerializer):
     is_subscribed = serializers.SerializerMethodField()
     avatar = Base64ImageField(required=False, allow_null=True)
 
