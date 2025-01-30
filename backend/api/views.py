@@ -60,8 +60,8 @@ class RecipeViewSet(viewsets.ModelViewSet):
         return [IsAuthorOrReadOnly(), IsAuthenticatedOrReadOnly()]
 
     @staticmethod
-    def handle_recipe_action(model, user, action_type):
-        recipe = get_object_or_404(Recipe, pk)
+    def handle_recipe_action(model, user, action_type, pk):
+        recipe = get_object_or_404(Recipe, pk=pk)
         if action_type == 'add':
             obj, created = model.objects.get_or_create(user=user, recipe=recipe)
             if not created:
@@ -88,18 +88,21 @@ class RecipeViewSet(viewsets.ModelViewSet):
         return self.handle_recipe_action(
             ShoppingCart, 
             request.user, 
-            'remove')
+            'remove',
+            pk
+            )
 
     @action(detail=True, methods=['post'], permission_classes=[IsAuthenticated])
     def favorite(self, request, pk=None):
         return self.handle_recipe_action(
             model = Favorite,
             user = request.user,
-            action_type = 'add'
+            action_type = 'add',
+            pk = pk
         )
     @favorite.mapping.delete
     def remove_from_favorites(self, request, pk=None):
-        return self.handle_recipe_action(Favorite, request.user, recipe, 'remove')
+        return self.handle_recipe_action(Favorite, request.user, 'remove', pk)
 
     @action(detail=True, methods=['get'], url_path='get-link')
     def get_link(self, request, pk=None):
